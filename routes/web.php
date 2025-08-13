@@ -5,11 +5,13 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CrossingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -46,6 +48,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/verify', [EquipmentController::class, 'verify'])->name('equipment.verify');
     });
 
+
+    // Crossing
+    Route::resource('crossings', CrossingController::class);
+
     // Report Routes
     Route::resource('reports', ReportController::class)->middleware('auth');
     Route::get('reports/{report}/validate', [ReportController::class, 'showValidation'])->name('reports.validate');
@@ -55,6 +61,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // User Management Routes
+    Route::resource('users', UserController::class)->except(['show']);
 });
 
 require __DIR__ . '/auth.php';
